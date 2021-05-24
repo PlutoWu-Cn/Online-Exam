@@ -1,4 +1,4 @@
-package com.exam.serviceimpl;
+package com.exam.service.impl;
 
 import com.exam.entity.Admin;
 import com.exam.mapper.AdminMapper;

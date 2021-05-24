@@ -1,4 +1,4 @@
-package com.exam.serviceimpl;
+package com.exam.service.impl;
 
 import com.exam.entity.Admin;
 import com.exam.entity.Student;
@@ -7,8 +7,6 @@ import com.exam.mapper.LoginMapper;
 import com.exam.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author PlutoWu

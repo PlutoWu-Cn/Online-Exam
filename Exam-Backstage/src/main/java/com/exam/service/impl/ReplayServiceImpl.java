@@ -1,4 +1,4 @@
-package com.exam.serviceimpl;
+package com.exam.service.impl;
 
 import com.exam.entity.Replay;
 import com.exam.mapper.ReplayMapper;

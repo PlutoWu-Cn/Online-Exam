@@ -2,7 +2,7 @@ package com.exam.controller;
 
 import com.exam.entity.ApiResult;
 import com.exam.entity.Replay;
-import com.exam.serviceimpl.ReplayServiceImpl;
+import com.exam.service.impl.ReplayServiceImpl;
 import com.exam.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

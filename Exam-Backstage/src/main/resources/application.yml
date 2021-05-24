@@ -10,4 +10,5 @@ spring:
     password: root
 
 logging:
-  level: debug
+  level:
+    com.exam: debug

@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.exam.entity.ApiResult;
 import com.exam.entity.Teacher;
-import com.exam.serviceimpl.TeacherServiceImpl;
+import com.exam.service.impl.TeacherServiceImpl;
 import com.exam.util.ApiResultHandler;
-import com.exam.vo.AnswerVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

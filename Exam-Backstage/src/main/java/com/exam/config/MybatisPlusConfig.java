@@ -1,4 +1,4 @@
-package com.exam;
+package com.exam.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;

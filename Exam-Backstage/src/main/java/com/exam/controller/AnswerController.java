@@ -3,7 +3,7 @@ package com.exam.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.exam.entity.ApiResult;
-import com.exam.serviceimpl.AnswerServiceImpl;
+import com.exam.service.impl.AnswerServiceImpl;
 import com.exam.util.ApiResultHandler;
 import com.exam.vo.AnswerVO;
 import org.springframework.beans.factory.annotation.Autowired;

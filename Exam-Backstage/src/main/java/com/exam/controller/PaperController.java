@@ -1,10 +1,10 @@
 package com.exam.controller;
 
 import com.exam.entity.*;
-import com.exam.serviceimpl.FillQuestionServiceImpl;
-import com.exam.serviceimpl.JudgeQuestionServiceImpl;
-import com.exam.serviceimpl.MultiQuestionServiceImpl;
-import com.exam.serviceimpl.PaperServiceImpl;
+import com.exam.service.impl.FillQuestionServiceImpl;
+import com.exam.service.impl.JudgeQuestionServiceImpl;
+import com.exam.service.impl.MultiQuestionServiceImpl;
+import com.exam.service.impl.PaperServiceImpl;
 import com.exam.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

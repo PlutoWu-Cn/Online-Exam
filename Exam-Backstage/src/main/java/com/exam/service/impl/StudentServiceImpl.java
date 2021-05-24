@@ -1,4 +1,4 @@
-package com.exam.serviceimpl;
+package com.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,8 +7,6 @@ import com.exam.mapper.StudentMapper;
 import com.exam.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author PlutoWu

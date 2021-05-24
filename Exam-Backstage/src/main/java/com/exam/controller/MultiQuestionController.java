@@ -2,7 +2,7 @@ package com.exam.controller;
 
 import com.exam.entity.ApiResult;
 import com.exam.entity.MultiQuestion;
-import com.exam.serviceimpl.MultiQuestionServiceImpl;
+import com.exam.service.impl.MultiQuestionServiceImpl;
 import com.exam.util.ApiResultHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
