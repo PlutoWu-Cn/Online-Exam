@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: route_question # 内容微服务路由规则
+          uri: lb://Exam-Question
+          predicates: # 断言
+            - Path=/api/question/** # 如果前端请求路径包含 api/question，则应用这条路由规则
+          filters: # 过滤器
+            - RewritePath=/api/(?<segment>.*),/$\{segment} # 将跳转路径中包含的api替换成question
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: Exam-Gateway
+
+server:
+  port: 8080
+
