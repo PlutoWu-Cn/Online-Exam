@@ -35,4 +35,8 @@ public class ExamManage {
     private String type;
 
     private String tips;
+    
+    private Date startTime;
+
+    private Date endTime;
 }
