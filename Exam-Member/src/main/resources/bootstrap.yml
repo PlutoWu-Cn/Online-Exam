@@ -1,0 +1,16 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: nacos-config-data
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: DEV_GROUP
+        namespace: 359378c3-db24-4fa5-ae2d-6fd030589e41
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>Exam-Common</module>
+        <module>Exam-Member</module>
+        <module>Exam-Question</module>
+        <module>Exam-Message</module>
+        <module>Exam-Gateway</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--spring cloud alibaba 2.1.0.RELEASE-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.1.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <groupId>com.exam</groupId>
+    <artifactId>exam</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ExamSystem</name>
+    <description>Online ExamSystem project based Spring Boot</description>
+
+    <developers>
+        <developer>
+            <name>PlutoWu</name>
+            <email>p1utowu@qq.com</email>
+        </developer>
+    </developers>
+
+</project>
