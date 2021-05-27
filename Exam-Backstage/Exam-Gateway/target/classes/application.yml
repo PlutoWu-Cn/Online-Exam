@@ -2,12 +2,26 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: route_question # 内容微服务路由规则
-          uri: lb://Exam-Question
+        - id: route_member # 登录微服务路由规则
+          uri: http://localhost:9000
           predicates: # 断言
-            - Path=/api/question/** # 如果前端请求路径包含 api/question，则应用这条路由规则
-          filters: # 过滤器
-            - RewritePath=/api/(?<segment>.*),/$\{segment} # 将跳转路径中包含的api替换成question
+            - Path=/login,/admins,/admin/**,/students/**,/student/**,/studentPWD,/teachers/**,/teacher/**
+
+        - id: route_exam # 考试微服务路由规则
+          uri: http://localhost:9002
+          predicates: # 断言
+            - Path=/answers/**,/exams/**,/exam/**,/examManagePaperId,/papers,/paper/**,/paperManage,/scores/**,/score/**
+
+        - id: route_question # 问题微服务路由规则
+          uri: http://localhost:9002
+          predicates: # 断言
+            - Path=/fillQuestion,/fillQuestionId,/item,/judgeQuestion,/judgeQuestionId,/MultiQuestion,/MultiQuestionId
+
+        - id: route_question # 内容微服务路由规则
+          uri: http://localhost:9001
+          predicates: # 断言
+            - Path=/messages/**,/message/**,/replay/**
+
     nacos:
       config:
         server-addr: 127.0.0.1:8848

@@ -1,5 +1,6 @@
 package com.exam.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -35,4 +36,10 @@ public class ExamManage {
     private String type;
 
     private String tips;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date startTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
 }

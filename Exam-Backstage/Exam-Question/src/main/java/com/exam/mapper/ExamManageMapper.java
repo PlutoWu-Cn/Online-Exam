@@ -28,12 +28,12 @@ public interface ExamManageMapper {
     @Update("update exam_manage set description = #{description},source = #{source},paperId = #{paperId}," +
             "examDate = #{examDate},totalTime = #{totalTime},grade = #{grade},term = #{term}," +
             "major = #{major},institute = #{institute},totalScore = #{totalScore}," +
-            "type = #{type},tips = #{tips} where examCode = #{examCode}")
+            "type = #{type},tips = #{tips},startTime = #{startTime},endTime = #{endTime} where examCode = #{examCode}")
     int update(ExamManage exammanage);
 
     @Options(useGeneratedKeys = true, keyProperty = "examCode")
     @Insert("insert into exam_manage(description,source,paperId,examDate,totalTime,grade,term,major,institute,totalScore,type,tips)" +
-            " values(#{description},#{source},#{paperId},#{examDate},#{totalTime},#{grade},#{term},#{major},#{institute},#{totalScore},#{type},#{tips})")
+            " values(#{description},#{source},#{paperId},#{examDate},#{totalTime},#{grade},#{term},#{major},#{institute},#{totalScore},#{type},#{tips},#{startTime},)#{endTime}")
     int add(ExamManage exammanage);
 
     /**
