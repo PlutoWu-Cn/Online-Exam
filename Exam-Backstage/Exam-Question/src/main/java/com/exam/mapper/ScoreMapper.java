@@ -28,11 +28,11 @@ public interface ScoreMapper {
     List<Score> findAll();
 
     // 分页
-    @Select("select scoreId,examCode,studentId,subject,ptScore,etScore,score,answerDate from score where studentId = #{studentId} order by scoreId desc")
+    @Select("select scoreId,examCode,studentId,subject,ptScore,etScore,score,answerDate from score where studentId = #{arg0} order by scoreId desc")
     IPage<Score> findById(Page<?> page, Integer studentId);
 
     // 不分页
-    @Select("select scoreId,examCode,studentId,subject,ptScore,etScore,score,answerDate from score where studentId = #{studentId}")
+    @Select("select scoreId,examCode,studentId,subject,ptScore,etScore,score,answerDate from score where studentId = #{arg0}")
     List<Score> findById(Integer studentId);
 
     /**

@@ -13,13 +13,13 @@ import org.apache.ibatis.annotations.*;
 public interface MessageMapper {
     @Select("select id,id as temp_id,title,content,time from message order by id desc")
     @Results({
-            @Result(property = "replays", column = "temp_id", many = @Many(select = "ReplayMapper.findAllById"))
+            @Result(property = "replays", column = "temp_id", many = @Many(select = "com.exam.mapper.ReplayMapper.findAllById"))
     })
     IPage<Message> findAll(Page page);
 
     @Select("select id,title,content,time from message where id = #{id}")
     @Results({
-            @Result(property = "replays", column = "id", many = @Many(select = "ReplayMapper.findAllById"))
+            @Result(property = "replays", column = "id", many = @Many(select = "com.exam.mapper.ReplayMapper.findAllById"))
     })
     Message findById(Integer id);
 
