@@ -16,7 +16,7 @@ public interface ScoreService {
 
     List<Score> findAll();
 
-    IPage<Score> findById(Page page, Integer studentId);
+    IPage<Score> findByIdII(Page page, Integer studentId);
 
     List<Score> findById(Integer studentId);
 
