@@ -23,15 +23,15 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.demo.*Controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.exam.*Controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("demo")
-                .description("demo")
+                .title("Pluto的SwaggerAPI文档")
+                .description("PlutoWu Swagger")
                 .termsOfServiceUrl("")
                 .version("1.0")
                 .build();
