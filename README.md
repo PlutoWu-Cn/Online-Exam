@@ -1,23 +1,36 @@
 # OnlineExam
 
 #### 介绍
-Spring Boot + Vue 构建的在线考试系统
+
+OnlineExam是由Spring Cloud Alibaba 与 Vue 构建的极简但功能完备的在线考试系统
 
 #### 软件架构
-软件架构说明
 
+后端技术栈
 
-#### 安装教程
+- Spring Cloud Gateway
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- Spring Cloud Alibaba
+
+- Mybatis Plus
+
+- Zipkin
+
+  
+
+前端技术栈
+
+- Vue
+- Element-UI
+- Tailwind CSS
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  克隆本项目或在发行版中下载源代码
+2.  运行 sql 脚本，并启动 Nacos 与 Zipkin
+3.  启动 Exam-Backstage 下的服务
+4.  前端项目 npm install 安装所需依赖
+5.  运行前端项目即可完成项目启动
 
 #### 参与贡献
 
@@ -26,12 +39,12 @@ Spring Boot + Vue 构建的在线考试系统
 3.  提交代码
 4.  新建 Pull Request
 
+#### To-Do
 
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- [x] 后端微服务拆分
+- [x] 前端学生端与管理端拆分
+- [ ] 前端页面美化及功能优化
+- [x] 配置 Spring Cloud Gateway 动态路由
+- [x] 配置 Zipkin 链路追踪
+- [ ] 使用 Sharding JDBC 进行主从复制及读写分离
+- [ ] 构建 ELK 日志收集系统

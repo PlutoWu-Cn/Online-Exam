@@ -1,22 +1,33 @@
 # OnlineExam
 
 #### Description
-Spring Boot + Vue 构建的在线考试系统
+
+OnlineExam is a simple but complete online examination system built by Spring Cloud Alibaba and Vue
 
 #### Software Architecture
-Software architecture description
 
-#### Installation
+Backstage tech-stack
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+- Spring Cloud Gateway
+- Spring Cloud Alibaba
+- Mybatis Plus
+- Zipkin
+
+
+
+Front tech-stack
+
+- Vue
+- Element-UI
+- Tailwind CSS
 
 #### Instructions
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  Clone the project or download the source code in the distribution
+2.  Run SQL script and start Nacos and Zipkin
+3.  Starting services under Exam-Backstage
+4.  Front project run npm install
+5.  Run the Front project to start the project
 
 #### Contribution
 
@@ -25,12 +36,12 @@ Software architecture description
 3.  Commit your code
 4.  Create Pull Request
 
+#### To-Do
 
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- [x] Backstage microservice splitting
+- [x] Separation of Front student service and management service
+- [ ] Front page beautification and function optimization
+- [x] Configuring Spring Cloud Gateway dynamic routing
+- [x] Configure Zipkin link tracking
+- [ ] Master slave copy and read write separation using Sharding JDBC
+- [ ] Build ELK log collection system
