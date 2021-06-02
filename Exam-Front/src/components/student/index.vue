@@ -1,6 +1,7 @@
 <!--学生考试首页-->
 <template>
   <div id="student">
+ 
     <el-row class="shadow-md bg-white px-3.5">
       <el-col :span="24">
         <ul class="list text-gray-700 ">

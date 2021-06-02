@@ -9,9 +9,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueCookies from 'vue-cookies'
 import './assets/css/tailwind.css'
+import SIdentify from './components/common/identify.vue'
 
 Vue.use(ElementUI)
 Vue.use(VueCookies)
+Vue.use(SIdentify)
 
 Vue.config.productionTip = false
 Vue.prototype.bus = new Vue()
