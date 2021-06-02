@@ -58,6 +58,10 @@ export default new Router({
           component: () => import('@/components/teacher/addAnswer')
         },
         {
+          path: '/editanswer', //增加题库主界面
+          component: () => import('@/components/teacher/editanswer')
+        },
+        {
           path: '/addAnswerChildren', //点击试卷跳转到添加题库页面
           component: () => import('@/components/teacher/addAnswerChildren')
         },

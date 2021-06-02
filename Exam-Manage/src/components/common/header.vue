@@ -9,74 +9,113 @@
       <el-col :span="20" class="topbar-right">
         <i class="el-icon-menu" @click="toggle()"></i>
         <div class="user">
-          <span>{{user.userName}}</span>
-          <img src="@/assets/img/userimg.png" class="user-img" ref="img" @click="showSetting()" />
+          <span>{{ user.userName }}</span>
+          <img
+            src="@/assets/img/userimg.png"
+            class="user-img"
+            ref="img"
+            @click="showSetting()"
+          />
           <transition name="fade">
             <div class="out" ref="out" v-show="login_flag">
               <ul>
-                <li><a href="javascript:;">用户信息</a></li>
+                <!-- 用户信息对话框 -->
+                <li @click="showdialogVisible = true">
+                  <a href="javascript:;">用户信息</a>
+                </li>
                 <li><a href="javascript:;">设置</a></li>
-                <li class="exit" @click="exit()"><a href="javascript:;">退出登录</a></li>
+                <li class="exit" @click="exit()">
+                  <a href="javascript:;">退出登录</a>
+                </li>
               </ul>
             </div>
           </transition>
         </div>
       </el-col>
     </el-row>
+    <el-dialog
+      :visible.sync="showdialogVisible"
+      width="30%"
+      padding="5px"
+      :before-close="handleClose"
+    >
+      <template>
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column prop="name" label="用户名" width="100">
+          </el-table-column>
+          <el-table-column prop="password" label="密码" width="100">
+          </el-table-column>
+          <el-table-column prop="role" label="权限"> </el-table-column>
+        </el-table>
+      </template>
+      <span slot="footer" class="dialog-footer"> </span>
+    </el-dialog>
   </header>
 </template>
 
 <script>
-import store from '@/vuex/store'
-import {mapState,mapMutations} from 'vuex'
+import store from "@/vuex/store";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
+      tableData: [
+        {
+          name: "教师",
+          password: "123456",
+          role: "超级管理员"
+        }
+      ],
       login_flag: false,
-      user: { //用户信息
+      user: {
+        //用户信息
         userName: null,
         userId: null
-      } 
-    }
+      },
+      //用户信息对话框是否展示
+      showdialogVisible: false
+    };
   },
   created() {
-    this.getUserInfo()
+    this.getUserInfo();
   },
-  computed: mapState(["flag","menu"]),
+  computed: mapState(["flag", "menu"]),
   methods: {
     //显示、隐藏退出按钮
     showSetting() {
-      this.login_flag = !this.login_flag
+      this.login_flag = !this.login_flag;
     },
     //左侧栏放大缩小
     ...mapMutations(["toggle"]),
-    getUserInfo() { //获取用户信息
-      let userName = this.$cookies.get("cname")
-      let userId = this.$cookies.get("cid")
-      this.user.userName = userName
-      this.user.userId = userId
+    getUserInfo() {
+      //获取用户信息
+      let userName = this.$cookies.get("cname");
+      let userId = this.$cookies.get("cid");
+      this.user.userName = userName;
+      this.user.userId = userId;
     },
     index() {
-      this.$router.push({path: '/index'})
+      this.$router.push({ path: "/index" });
     },
     exit() {
-      let role = this.$cookies.get("role")
-      this.$router.push({path:"/"}) //跳转到登录页面
-      this.$cookies.remove("cname") //清除cookie
-      this.$cookies.remove("cid")
-      this.$cookies.remove("role")
-      if(role == 0) {
-        this.menu.pop()
+      let role = this.$cookies.get("role");
+      this.$router.push({ path: "/" }); //跳转到登录页面
+      this.$cookies.remove("cname"); //清除cookie
+      this.$cookies.remove("cid");
+      this.$cookies.remove("role");
+      if (role == 0) {
+        this.menu.pop();
       }
     }
   },
   store
-}
+};
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
@@ -84,7 +123,7 @@ export default {
 #topbar {
   position: relative;
   z-index: 10;
-  background-color: #124280;
+  background-color: #5fb6b0;
   height: 80px;
   line-height: 80px;
   color: #fff;
@@ -132,7 +171,7 @@ export default {
   font-size: 14px;
   position: absolute;
   top: 80px;
-  right: 0px;
+  right: -10px;
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 12px;
