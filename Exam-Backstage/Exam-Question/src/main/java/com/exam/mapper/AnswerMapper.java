@@ -13,6 +13,10 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface AnswerMapper {
+    /**
+     * @param page
+     * @return {@link IPage<AnswerVO>}
+     */
     @Select("select question, subject, score, section,level, \"选择题\" as type from multi_question " +
             "union select  question, subject, score, section,level, \"判断题\" as type  from judge_question " +
             "union select  question, subject, score, section,level, \"填空题\" as type from fill_question")

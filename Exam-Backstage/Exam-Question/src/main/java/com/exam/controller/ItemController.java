@@ -73,7 +73,7 @@ public class ItemController {
         }
         // 判断题
         List<Integer> judges = judgeQuestionService.findBySubject(item.getSubject(), judgeNumber);
-        if (fills == null) {
+        if (judges == null) {
             return ApiResultHandler.buildApiResult(400, "判断题数据库获取失败", null);
         }
         for (Integer judge : judges) {

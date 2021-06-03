@@ -3,9 +3,10 @@ package com.exam.entity;
 import lombok.Data;
 
 /**
+ * 填空题实体类
  * @author PlutoWu
  * @date 2021/05/24
- *///填空题实体类
+ */
 @Data
 public class FillQuestion {
     private Integer questionId;
@@ -22,5 +23,6 @@ public class FillQuestion {
 
     private String section;
 
-    private String analysis; //题目解析
+    //题目解析
+    private String analysis;
 }
