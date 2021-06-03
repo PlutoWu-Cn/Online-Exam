@@ -54,29 +54,34 @@ public class ItemController {
         for (Integer number : changeNumbers) {
             PaperManage paperManage = new PaperManage(paperId, 1, number);
             int index = paperService.add(paperManage);
-            if (index == 0)
+            if (index == 0) {
                 return ApiResultHandler.buildApiResult(400, "选择题组卷保存失败", null);
+            }
         }
 
         // 填空题
         List<Integer> fills = fillQuestionService.findBySubject(item.getSubject(), fillNumber);
-        if (fills == null)
+        if (fills == null) {
             return ApiResultHandler.buildApiResult(400, "填空题数据库获取失败", null);
+        }
         for (Integer fillNum : fills) {
             PaperManage paperManage = new PaperManage(paperId, 2, fillNum);
             int index = paperService.add(paperManage);
-            if (index == 0)
+            if (index == 0) {
                 return ApiResultHandler.buildApiResult(400, "填空题题组卷保存失败", null);
+            }
         }
         // 判断题
         List<Integer> judges = judgeQuestionService.findBySubject(item.getSubject(), judgeNumber);
-        if (fills == null)
+        if (fills == null) {
             return ApiResultHandler.buildApiResult(400, "判断题数据库获取失败", null);
+        }
         for (Integer judge : judges) {
             PaperManage paperManage = new PaperManage(paperId, 3, judge);
             int index = paperService.add(paperManage);
-            if (index == 0)
+            if (index == 0) {
                 return ApiResultHandler.buildApiResult(400, "判断题题组卷保存失败", null);
+            }
         }
 
 
