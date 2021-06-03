@@ -1,13 +1,54 @@
 //查询所有题库
 <template>
   <div class="exam">
-    <el-table :data="pagination.records" border :row-class-name="tableRowClassName">
-      <el-table-column fixed="left" prop="subject" label="试卷名称" width="180"></el-table-column>
-      <el-table-column prop="question" label="题目信息" width="490"></el-table-column>
-      <el-table-column prop="section" label="所属章节" width="200"></el-table-column>
-      <el-table-column prop="type" label="题目类型" width="200"></el-table-column>
-      <el-table-column prop="score" label="试题分数" width="150"></el-table-column>
-      <el-table-column prop="level" label="难度等级" width="133"></el-table-column>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-input placeholder="请输入题目信息" class="input" v-model="name">
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="searchanswer"
+          ></el-button>
+        </el-input>
+      </el-col>
+    </el-row>
+    <el-table
+      :data="pagination.records"
+      border
+      :row-class-name="tableRowClassName"
+      ref="TableId"
+    >
+      <el-table-column
+        fixed="left"
+        prop="subject"
+        label="试卷名称"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="question"
+        label="题目信息"
+        width="490"
+      ></el-table-column>
+      <el-table-column
+        prop="section"
+        label="所属章节"
+        width="200"
+      ></el-table-column>
+      <el-table-column
+        prop="type"
+        label="题目类型"
+        width="200"
+      ></el-table-column>
+      <el-table-column
+        prop="score"
+        label="试题分数"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        prop="level"
+        label="难度等级"
+        width="133"
+      ></el-table-column>
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -31,7 +72,10 @@ export default {
         current: 1, //当前页
         total: null, //记录条数
         size: 6 //每页条数
-      }
+      },
+      // 试卷名称
+      name: "",
+      allexamanswer: {}
     };
   },
   created() {
@@ -45,7 +89,7 @@ export default {
       )
         .then(res => {
           this.pagination = res.data.data;
-          console.log(res);
+          console.log(res.data.data);
         })
         .catch(error => {});
     },
@@ -65,6 +109,23 @@ export default {
       } else {
         return "success-row";
       }
+    },
+    searchanswer() {
+      var examname = this.name;
+      const newData1 = [];
+      this.$axios(`/api/answers/1/${this.pagination.total}`).then(res => {
+        if (res.data.code == 200) {
+          this.allexamanswer = res.data.data;
+          console.log(this.allexamanswer);
+          this.allexamanswer.records.map(function(item) {
+            if (item.question.search(examname) != -1) {
+              newData1.push(item);
+            }
+          });
+        }
+      });
+      this.pagination.records = newData1;
+      console.log(newData1);
     }
   }
 };
@@ -82,16 +143,17 @@ export default {
     margin-left: 20px;
   }
   .el-table tr {
-    background-color: #DD5862 !important;
+    background-color: #dd5862 !important;
   }
 }
-  .el-table .warning-row {
-    background: #000 !important;
-    
-  }
+.el-table .warning-row {
+  background: #000 !important;
+}
 
-  .el-table .success-row {
-    background: #DD5862;
-  }
-
+.el-table .success-row {
+  background: #dd5862;
+}
+.input {
+  margin-bottom: 10px;
+}
 </style>

@@ -6,7 +6,7 @@
       <ul class="top">
         <li class="order">
           <el-badge :value="num_all" class="item" type="primary">
-            <span  @click="getExamInfo" >全部</span>
+            <span @click="getExamInfo">全部</span>
           </el-badge>
         </li>
         <li class="order">
@@ -39,9 +39,18 @@
         </li>
       </ul>
       <ul class="paper" v-loading="loading">
-        <li
+        <!-- <li
           class="item"
           v-for="(item, index) in pagination.records"
+          :key="index"
+        > -->
+
+        <li
+          class="item"
+          v-for="(item, index) in this.examrecord.slice(
+            (this.currentPage - 1) * this.pageSize,
+            this.currentPage * this.pageSize
+          )"
           :key="index"
         >
           <h4 @click="toExamMsg(item.examCode)">{{ item.source }}</h4>
@@ -65,11 +74,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="pagination.current"
-          :page-sizes="[6, 10, 20, 40]"
-          :page-size="pagination.size"
+          :current-page="currentPage"
+          :page-sizes="pageSizes"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="pagination.total"
+          :total="total"
         >
         </el-pagination>
       </div>
@@ -78,7 +87,6 @@
 </template>
 
 <script>
-import format from "../../plugins/format";
 export default {
   // name: 'myExam'
   data() {
@@ -89,21 +97,32 @@ export default {
       num_o: null, //已过期的试卷数
       loading: false,
       key: null, //搜索关键字
-      allExam: null, //所有考试信息
-
-      pagination: {
-        //分页后的考试信息
-        current: 1, //当前页
-        total: null, //记录条数
-        size: 6, //每页条数
-      },
+      examrecord:[],//
+      allExam: [], //所有考试信息
+      flag: null, //标记属于哪个分类
+      // startindex: null, //试卷筛选得出数组的开始下标
+      // endtindex: null, //试卷筛选得出数组的结束下标
+      currentPage: 1, //当前页
+      total: null, //记录条数
+      pageSize: 6, //每页条数
+      pageSizes:[6,10,15,20],
+      // pagination: {
+      //   //分页后的考试信息
+      //   currentPage: 1, //当前页
+      //   total: null, //记录条数
+      //   pageSize: 6, //每页条数
+      // },
     };
   },
   created() {
-    this.getExamInfo();
+    // this.getExamInfo();
     this.getTime();
     this.getNumber();
-    this.loading = true;
+    // this.loading = true;
+    this.flag = 0;
+    // this.startindex = 0;
+    // this.endtindex = 0;
+    this.endtindex = this.pageSize;
   },
   // watch: {
 
@@ -134,26 +153,29 @@ export default {
     },
     //获取标签上的考试数
     getNumber() {
-        var current_time = this.getTime();
+      var current_time = this.getTime();
       this.$axios("/api/exams").then((res) => {
         if (res.data.code == 200) {
-          let allExam = res.data.data;
-          this.num_all = res.data.data.length;
+          this.allExam = res.data.data;
+          this.examrecord=this.allExam;
+          this.total=this.allExam.length;
+          this.num_all = this.total;
           this.num_nots = 0;
           this.num_s = 0;
           this.num_o = 0;
-          allExam.forEach((item) => {
-            let flag = this.CompareDate(
+          this.allExam.forEach((item) => {
+            this.flag = this.CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
             );
-            if (flag === 1) {
+            if (this.flag === 1) {
               this.num_nots++;
             }
-            if (flag === 2) {
+            if (this.flag === 2) {
               this.num_s++;
-            } else {
+            }
+            if (this.flag === 3) {
               this.num_o++;
             }
           });
@@ -161,30 +183,73 @@ export default {
       });
     },
     //获取当前所有考试信息
-    getExamInfo() {
-      this.$axios(
-        `/api/exams/${this.pagination.current}/${this.pagination.size}`
-      )
-        .then((res) => {
-          this.pagination = res.data.data;
-          this.loading = false;
-          console.log('1',this.pagination);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    // getExamInfo() {
+    //   this.$axios(
+    //     `/api/exams/${this.pagination.current}/${this.pagination.size}`
+    //   )
+
+    //     .then((res) => {
+    //       this.pagination = res.data.data;
+    //       this.loading = false;
+    //       console.log("1", this.pagination);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+
+
+    //获取当前所有考试信息
+    getExamInfo(){
+      this.examrecord=this.allExam;
+      console.log('www',this.allExam)
     },
     //改变当前记录条数
     handleSizeChange(val) {
-      
-      this.pagination.size = val;
-      this.getExamInfo();
+      this.pageSize=val
+      this.currentPage=1
+      console.log(`每页 ${val} 条`);
     },
-    //改变当前页码，重新发送请求
+    //改变当前页码
     handleCurrentChange(val) {
-      this.pagination.current = val;
-      this.getExamInfo();
+      this.currentPage = val;
+      console.log(`当前页: ${val}`);
     },
+    // //改变当前记录条数
+    // handleSizeChange(val) {
+    //   this.pagination.size = val;
+    //   console.log("flag", this.flag);
+    //   if (this.flag === 1) {
+    //     this.showNotStarted();
+    //   }
+    //   if (this.flag === 2) {
+    //     this.showStarted();
+    //   }
+    //   if (this.flag === 3) {
+    //     this.showOverdue();
+    //   }
+    // },
+    // //改变当前页码，重新发送请求
+    // handleCurrentChange(val) {
+
+    //   this.pagination.current = val;
+    //        this.startindex = this.startindex + this.pagination.size;
+    //   this.endtindex = this.startindex + this.pagination.size;
+    //   console.log('this.pagination.current',this.pagination.current)
+    //    console.log("this.startindex", this.startindex);
+    //       console.log("this.endtindex", this.endtindex);
+    //   // this.getExamInfo();
+    //   console.log("flag", this.flag);
+    //   if (this.flag === 1) {
+    //     this.showNotStarted();
+    //   }
+    //   if (this.flag === 2) {
+    //     this.showStarted();
+    //   }
+    //   if (this.flag === 3) {
+    //     this.showOverdue();
+    //   }
+    // },
 
     //  对所有试卷的日期与当前日期相比较
     //  d1:startTime考试开始时间
@@ -192,11 +257,11 @@ export default {
     //  d3:currentTime当前时间
     CompareDate(d1, d2, d3) {
       //当前时间d3<考试开始时间d1 :未开始
-      if (new Date(d3) < new Date(d1)) {
+      if (new Date(d3) <=new Date(d1)) {
         return 1;
       }
       //开始时间d1<当前时间d3<考试结束时间d2  :已开始
-      if (new Date(d1) < new Date(d3) && new Date(d3) < new Date(d2)) {
+      if (new Date(d1) < new Date(d3) && new Date(d3) <= new Date(d2)) {
         return 2;
       }
       //已过期
@@ -211,24 +276,26 @@ export default {
       this.$axios("/api/exams").then((res) => {
         if (res.data.code == 200) {
           let allExam = res.data.data;
-     
+
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            let flag = this.CompareDate(
+            this.flag = this.CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
             );
-            if (flag === 1) {
-              console.log('source',item.source.includes(item.source))
+            if (this.flag === 1) {
+              // console.log("source", item.source.includes(item.source));
               return item.source.includes(item.source);
             }
           });
-          this.pagination.records = newPage;
-          this.pagination.total=newPage.length;
-          this.pagination.size=6;
-               console.log( 'this.pagination', newPage.length)
-         
+          this.examrecord = newPage;
+        
+          this.total=this.examrecord.length;
+          console.log("this.examrecord", newPage);
+          // this.pagination.total = newPage.length;
+
+        //   console.log("this.pagination", newPage.length);
         }
       });
     },
@@ -245,20 +312,37 @@ export default {
           // this.num_s = 0;
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            let flag = this.CompareDate(
+            this.flag = this.CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
             );
-            if (flag === 2) {
-        console.log('source',item.source.includes(item.source))
+            if (this.flag === 2) {
+              // console.log("source", item.source.includes(item.source));
               return item.source.includes(item.source);
             }
           });
-          this.pagination.records = newPage;
-           this.pagination.total=newPage.length
-           this.pagination.size=6;
-               console.log( 'this.pagination', newPage)
+              this.examrecord = newPage;
+              this.total=this.examrecord.length;
+          console.log("this.examrecord", newPage);
+          // if (newPage.length <= this.pagination.size) {
+          //   this.pagination.records = newPage;
+          // }
+          // if (newPage.length > this.pagination.size) {
+          //   this.endtindex = this.pagination.size;
+          //   this.pagination.records = newPage.slice(
+          //     this.startindex,
+          //     this.endtindex
+          //   );
+          // }
+
+          // console.log("this.startindex", this.startindex);
+          // console.log("this.endtindex", this.endtindex);
+          // this.pagination.records = newPage;
+          // this.pagination.total = newPage.length;
+          // this.pagination.size = 6;
+          // console.log("this.pagination", this.pagination.records);
+          // console.log("this.pagination.size", this.pagination.size);
         }
       });
     },
@@ -271,18 +355,32 @@ export default {
           // this.num_o = 0;
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            let flag = this.CompareDate(
+            this.flag = this.CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
             );
-            if (flag === 3) {
+            if (this.flag === 3) {
               return item.source.includes(item.source);
             }
           });
-          this.pagination.records = newPage;
-           this.pagination.total=newPage.length
-               console.log( 'this.pagination', newPage.length)
+              this.examrecord = newPage;
+                 this.total=this.examrecord.length;
+          console.log("this.examrecord", newPage);
+          // console.log("newPage", newPage);
+          // if (newPage.length <= this.pagination.size) {
+          //   this.pagination.records = newPage;
+          // } else {
+          //   // this.endtindex = this.pagination.size;
+          //   this.pagination.records = newPage.slice(
+          //     this.startindex,
+          //     this.endtindex
+          //   );
+          // }
+
+          // // this.pagination.records = newPage;
+          // this.pagination.total = newPage.length;
+          // console.log("this.pagination", newPage);
         }
       });
     },
@@ -294,7 +392,8 @@ export default {
           let newPage = allExam.filter((item) => {
             return item.source.includes(this.key);
           });
-          this.pagination.records = newPage;
+          this.examrecord = newPage;
+          this.total=this.examrecord.length;
         }
       });
     },
