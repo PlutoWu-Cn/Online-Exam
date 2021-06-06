@@ -1,6 +1,6 @@
 // 我的考试页面
 <template>
-  <div id="myExam">
+  <div id="myExam" v-loading="loading" >
     <div class="title"></div>
     <div class="wrapper bg-white rounded-3xl mb-8">
       <ul class="top">
@@ -70,6 +70,8 @@
           </div>
         </li>
       </ul>
+     
+
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -87,17 +89,21 @@
 </template>
 
 <script>
+import store from "../../vuex/store";
+import { mapState, mapMutations, mapGetters } from "vuex";
+import CompareDate from '../../plugins/dateformat';
 export default {
   // name: 'myExam'
   data() {
     return {
+      exams: null,
       num_all: null, //全部试卷
       num_nots: null, //未开始的试卷数
       num_s: null, //已开始的试卷数
       num_o: null, //已过期的试卷数
       loading: false,
       key: null, //搜索关键字
-      examrecord:[],//
+      examrecord: [], //
       allExam: [], //所有考试信息
       flag: null, //标记属于哪个分类
       // startindex: null, //试卷筛选得出数组的开始下标
@@ -105,7 +111,7 @@ export default {
       currentPage: 1, //当前页
       total: null, //记录条数
       pageSize: 6, //每页条数
-      pageSizes:[6,10,15,20],
+      pageSizes: [6, 10, 15, 20],
       // pagination: {
       //   //分页后的考试信息
       //   currentPage: 1, //当前页
@@ -116,20 +122,41 @@ export default {
   },
   created() {
     // this.getExamInfo();
+
+    this.$store.dispatch("getAllExam");
+    // this.getTime();
+    // this.getNumber();
+    this.loading = true;
+    // this.flag = 0;
+    // this.endtindex = this.pageSize;
+  },
+
+  mounted() {
     this.getTime();
     this.getNumber();
     // this.loading = true;
     this.flag = 0;
-    // this.startindex = 0;
-    // this.endtindex = 0;
     this.endtindex = this.pageSize;
   },
-  // watch: {
+  computed: {
+    // ...mapGetters(["getAllExam"]),
+    getExams() {
+      return this.$store.getters.examsList;
+      // return this.$store.getters.getAllExam;
+    },
 
-  // },
+  },
+  watch: {
+    getExams(val) {
+      this.examsList = val;
+      this.exams = val;
+      console.log("aaval", val);
+    },
+  },
   methods: {
     //获取当前时间
     getTime() {
+      this.loading = false;
       var date = new Date(); //创建时间对象
       var year = date.getFullYear(); //获取年
       var month = date.getMonth() + 1; //获取月
@@ -153,18 +180,20 @@ export default {
     },
     //获取标签上的考试数
     getNumber() {
+      console.log("56", this.$store.getters.examsList);
+
       var current_time = this.getTime();
       this.$axios("/api/exams").then((res) => {
         if (res.data.code == 200) {
           this.allExam = res.data.data;
-          this.examrecord=this.allExam;
-          this.total=this.allExam.length;
+          this.examrecord = this.allExam;
+          this.total = this.allExam.length;
           this.num_all = this.total;
           this.num_nots = 0;
           this.num_s = 0;
           this.num_o = 0;
           this.allExam.forEach((item) => {
-            this.flag = this.CompareDate(
+            this.flag = CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
@@ -182,32 +211,16 @@ export default {
         }
       });
     },
-    //获取当前所有考试信息
-    // getExamInfo() {
-    //   this.$axios(
-    //     `/api/exams/${this.pagination.current}/${this.pagination.size}`
-    //   )
-
-    //     .then((res) => {
-    //       this.pagination = res.data.data;
-    //       this.loading = false;
-    //       console.log("1", this.pagination);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-
 
     //获取当前所有考试信息
-    getExamInfo(){
-      this.examrecord=this.allExam;
-      console.log('www',this.allExam)
+    getExamInfo() {
+      this.examrecord = this.allExam;
+      console.log("www", this.allExam);
     },
     //改变当前记录条数
     handleSizeChange(val) {
-      this.pageSize=val
-      this.currentPage=1
+      this.pageSize = val;
+      this.currentPage = 1;
       console.log(`每页 ${val} 条`);
     },
     //改变当前页码
@@ -215,71 +228,16 @@ export default {
       this.currentPage = val;
       console.log(`当前页: ${val}`);
     },
-    // //改变当前记录条数
-    // handleSizeChange(val) {
-    //   this.pagination.size = val;
-    //   console.log("flag", this.flag);
-    //   if (this.flag === 1) {
-    //     this.showNotStarted();
-    //   }
-    //   if (this.flag === 2) {
-    //     this.showStarted();
-    //   }
-    //   if (this.flag === 3) {
-    //     this.showOverdue();
-    //   }
-    // },
-    // //改变当前页码，重新发送请求
-    // handleCurrentChange(val) {
-
-    //   this.pagination.current = val;
-    //        this.startindex = this.startindex + this.pagination.size;
-    //   this.endtindex = this.startindex + this.pagination.size;
-    //   console.log('this.pagination.current',this.pagination.current)
-    //    console.log("this.startindex", this.startindex);
-    //       console.log("this.endtindex", this.endtindex);
-    //   // this.getExamInfo();
-    //   console.log("flag", this.flag);
-    //   if (this.flag === 1) {
-    //     this.showNotStarted();
-    //   }
-    //   if (this.flag === 2) {
-    //     this.showStarted();
-    //   }
-    //   if (this.flag === 3) {
-    //     this.showOverdue();
-    //   }
-    // },
-
-    //  对所有试卷的日期与当前日期相比较
-    //  d1:startTime考试开始时间
-    //  d2:endTime考试结束时间
-    //  d3:currentTime当前时间
-    CompareDate(d1, d2, d3) {
-      //当前时间d3<考试开始时间d1 :未开始
-      if (new Date(d3) <=new Date(d1)) {
-        return 1;
-      }
-      //开始时间d1<当前时间d3<考试结束时间d2  :已开始
-      if (new Date(d1) < new Date(d3) && new Date(d3) <= new Date(d2)) {
-        return 2;
-      }
-      //已过期
-      else {
-        return 3;
-      }
-    },
 
     //点击未开始，筛选还没进行的考试
     showNotStarted() {
       var current_time = this.getTime();
-      this.$axios("/api/exams").then((res) => {
-        if (res.data.code == 200) {
-          let allExam = res.data.data;
+      console.log('shabi',this.$store.getters.examsList)
+   let allExam = this.$store.getters.examsList;
 
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            this.flag = this.CompareDate(
+            this.flag = CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
@@ -290,29 +248,26 @@ export default {
             }
           });
           this.examrecord = newPage;
-        
-          this.total=this.examrecord.length;
+
+          this.total = this.examrecord.length;
           console.log("this.examrecord", newPage);
           // this.pagination.total = newPage.length;
 
-        //   console.log("this.pagination", newPage.length);
-        }
-      });
+          //   console.log("this.pagination", newPage.length);
+    
     },
 
     //点击已开始，筛选已经进行的考试
     showStarted() {
       var current_time = this.getTime();
-      // var current_time = "2021-04-01"; //当前时间
-      //对所有试卷的日期与当前日期相比较
-
-      this.$axios("/api/exams").then((res) => {
-        if (res.data.code == 200) {
-          let allExam = res.data.data;
+      console.log('shabi',this.$store.getters.examsList)
+     
+      
+          let allExam = this.$store.getters.examsList;
           // this.num_s = 0;
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            this.flag = this.CompareDate(
+            this.flag = CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
@@ -322,40 +277,23 @@ export default {
               return item.source.includes(item.source);
             }
           });
-              this.examrecord = newPage;
-              this.total=this.examrecord.length;
+          this.examrecord = newPage;
+          this.total = this.examrecord.length;
           console.log("this.examrecord", newPage);
-          // if (newPage.length <= this.pagination.size) {
-          //   this.pagination.records = newPage;
-          // }
-          // if (newPage.length > this.pagination.size) {
-          //   this.endtindex = this.pagination.size;
-          //   this.pagination.records = newPage.slice(
-          //     this.startindex,
-          //     this.endtindex
-          //   );
-          // }
-
-          // console.log("this.startindex", this.startindex);
-          // console.log("this.endtindex", this.endtindex);
-          // this.pagination.records = newPage;
-          // this.pagination.total = newPage.length;
-          // this.pagination.size = 6;
-          // console.log("this.pagination", this.pagination.records);
-          // console.log("this.pagination.size", this.pagination.size);
-        }
-      });
+    
+        
+    
     },
     //展示已过期的试卷
     showOverdue() {
       var current_time = this.getTime();
-      this.$axios("/api/exams").then((res) => {
-        if (res.data.code == 200) {
-          let allExam = res.data.data;
+       console.log('shabi',this.$store.getters.examsList)
+ 
+          let allExam = this.$store.getters.examsList;
           // this.num_o = 0;
           let newPage = allExam.filter((item) => {
             // return item.source.includes(this.key);
-            this.flag = this.CompareDate(
+            this.flag = CompareDate(
               item.startTime.replace(/-/g, "/"),
               item.endTime.replace(/-/g, "/"),
               current_time.replace(/-/g, "/")
@@ -364,38 +302,21 @@ export default {
               return item.source.includes(item.source);
             }
           });
-              this.examrecord = newPage;
-                 this.total=this.examrecord.length;
+          this.examrecord = newPage;
+          this.total = this.examrecord.length;
           console.log("this.examrecord", newPage);
-          // console.log("newPage", newPage);
-          // if (newPage.length <= this.pagination.size) {
-          //   this.pagination.records = newPage;
-          // } else {
-          //   // this.endtindex = this.pagination.size;
-          //   this.pagination.records = newPage.slice(
-          //     this.startindex,
-          //     this.endtindex
-          //   );
-          // }
 
-          // // this.pagination.records = newPage;
-          // this.pagination.total = newPage.length;
-          // console.log("this.pagination", newPage);
-        }
-      });
+    
     },
     //搜索试卷
     search() {
-      this.$axios("/api/exams").then((res) => {
-        if (res.data.code == 200) {
-          let allExam = res.data.data;
+ let allExam = this.$store.getters.examsList;
           let newPage = allExam.filter((item) => {
             return item.source.includes(this.key);
           });
           this.examrecord = newPage;
-          this.total=this.examrecord.length;
-        }
-      });
+          this.total = this.examrecord.length;
+    
     },
     //跳转到试卷详情页
     toExamMsg(examCode) {
@@ -407,209 +328,6 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-.pagination {
-  padding: 20px 0px 30px 0px;
-  .el-pagination {
-    display: flex;
-    justify-content: center;
-  }
-}
-.paper {
-  h4 {
-    cursor: pointer;
-  }
-}
-.paper .item a {
-  color: #000;
-}
-.wrapper .top .order {
-  cursor: pointer;
-}
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.item .info i {
-  margin-right: 5px;
-  color: #0195ff;
-}
-.item .info span {
-  margin-right: 14px;
-}
-.paper .item {
-  width: 380px;
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217, 222, 234, 0.3);
-  transition: all 0.6s ease;
-}
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45);
-  transform: scale(1.03);
-}
-.paper .item .info {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper .item .name {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper * {
-  margin: 20px 0;
-}
-.wrapper .paper {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.top .el-icon-search {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-.top .icon {
-  position: relative;
-}
-.wrapper .top {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 20px;
-}
-#myExam .search-li {
-  margin-left: auto;
-}
-.top .search-li {
-  margin-left: auto;
-}
-.top li {
-  display: flex;
-  align-items: center;
-}
-.top .search {
-  margin-left: auto;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-}
-.top .search:hover {
-  color: #0195ff;
-  border-color: #0195ff;
-}
-.wrapper .top {
-  display: flex;
-}
-.wrapper .top li {
-  margin: 20px;
-}
-#myExam {
-  width: 980px;
-  margin: 0 auto;
-}
-#myExam .title {
-  margin: 20px;
-}
-#myExam .wrapper {
-  background-color: #fff;
-}
-.wrapper .top .order {
-  cursor: pointer;
-}
-.wrapper .top .order:hover {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.wrapper .top .order:visited {
-  color: #0195ff;
-  border-bottom: 2px solid #0195ff;
-}
-.item .info i {
-  margin-right: 5px;
-  color: #0195ff;
-}
-.item .info span {
-  margin-right: 14px;
-}
-.paper .item {
-  border-radius: 4px;
-  padding: 20px 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 4px 2px rgba(217, 222, 234, 0.3);
-  transition: all 0.6s ease;
-}
-.paper .item:hover {
-  box-shadow: 0 0 4px 2px rgba(140, 193, 248, 0.45);
-}
-.paper .item .info {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper .item .name {
-  font-size: 14px;
-  color: #88949b;
-}
-.paper * {
-  margin: 20px 0;
-}
-.wrapper .paper {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.top .el-icon-search {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-.top .icon {
-  position: relative;
-}
-.wrapper .top {
-  border-bottom: 1px solid #eee;
-}
-#myExam .search-li {
-  margin-left: auto;
-}
-.top .search-li {
-  margin-left: auto;
-}
-.top li {
-  display: flex;
-  align-items: center;
-}
-.top .search {
-  margin-left: auto;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-}
-.top .search:hover {
-  color: #0195ff;
-  border-color: #0195ff;
-}
-.wrapper .top {
-  display: flex;
-}
-.wrapper .top li {
-  margin: 20px;
-}
-#myExam {
-  width: 980px;
-  margin: 0 auto;
-}
-#myExam .title {
-  margin: 20px;
-}
-#myExam .wrapper {
-  background-color: #fff;
-}
+<style scoped>
+@import '../../assets/css/startExam.scss';
 </style>
