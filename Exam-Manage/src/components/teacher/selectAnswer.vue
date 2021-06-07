@@ -22,32 +22,28 @@
         fixed="left"
         prop="subject"
         label="试卷名称"
-        width="180"
+        width="100%"
       ></el-table-column>
-      <el-table-column
-        prop="question"
-        label="题目信息"
-        width="490"
-      ></el-table-column>
+      <el-table-column prop="question" label="题目信息"></el-table-column>
       <el-table-column
         prop="section"
         label="所属章节"
-        width="200"
+        width="80%"
       ></el-table-column>
       <el-table-column
-        prop="type"
-        label="题目类型"
-        width="200"
+        prop="rightAnswer"
+        label="题目答案"
+        width="80%"
       ></el-table-column>
       <el-table-column
         prop="score"
         label="试题分数"
-        width="150"
+        width="80%"
       ></el-table-column>
       <el-table-column
         prop="level"
         label="难度等级"
-        width="133"
+        width="80%"
       ></el-table-column>
     </el-table>
     <el-pagination

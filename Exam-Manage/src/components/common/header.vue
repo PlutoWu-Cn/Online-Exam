@@ -20,10 +20,6 @@
             <div class="out" ref="out" v-show="login_flag">
               <ul>
                 <!-- 用户信息对话框 -->
-                <li @click="showdialogVisible = true">
-                  <a href="javascript:;">用户信息</a>
-                </li>
-                <li><a href="javascript:;">设置</a></li>
                 <li class="exit" @click="exit()">
                   <a href="javascript:;">退出登录</a>
                 </li>
@@ -168,10 +164,12 @@ export default {
   cursor: pointer;
 }
 .user .out {
+  width: 100px;
+  text-align: center;
   font-size: 14px;
   position: absolute;
   top: 80px;
-  right: -10px;
+  right: -30px;
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 12px;

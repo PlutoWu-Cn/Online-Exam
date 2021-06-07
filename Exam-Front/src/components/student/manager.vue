@@ -89,18 +89,5 @@
 </script>
 
 <style scoped>
-#manager .pass  label{
-  color: red;
-  font-size: 20px;
-}
-#manager {
-  width: 600px;
-  margin: 0 auto;
-  margin-top: 100px;
-  text-align: center;
-  margin-bottom: 300px;
-}
-#manager .alter {
-  margin: 30px 0px;
-}
+@import '../../assets/css/manager.scss';
 </style>

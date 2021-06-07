@@ -9,20 +9,16 @@
       ref="TableId"
     >
       <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column
-        prop="type"
-        label="题目类型"
-        width="100"
-      ></el-table-column>
+
       <el-table-column
         prop="question"
         label="题目信息"
         width="490"
       ></el-table-column>
       <el-table-column
-        prop="answer"
+        prop="rightAnswer"
         label="题目答案"
-        width="490"
+        width="100"
       ></el-table-column>
       <el-table-column
         prop="section"
@@ -33,12 +29,12 @@
       <el-table-column
         prop="score"
         label="试题分数"
-        width="50"
+        width="100"
       ></el-table-column>
       <el-table-column
         prop="level"
         label="难度等级"
-        width="50"
+        width="100"
       ></el-table-column>
     </el-table>
   </div>
